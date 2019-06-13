@@ -4,28 +4,33 @@ class LinksController < ApplicationController
   # GET /links
   # GET /links.json
   def index
-    @links = Link.all
+    @links = Link.all.limit(20).reverse
   end
 
   # GET /links/1
   # GET /links/1.json
   def show
+    @categories = Category.all
   end
 
   # GET /links/new
   def new
     @link = Link.new
+    @categories = Category.all
   end
 
   # GET /links/1/edit
   def edit
+    @categories = Category.all
   end
 
   # POST /links
   # POST /links.json
   def create
     @link = Link.new(link_params)
-
+    puts "Link: "
+    puts link_params
+    puts @link.to_s
     respond_to do |format|
       if @link.save
         format.html { redirect_to @link, notice: 'Link was successfully created.' }
@@ -69,6 +74,6 @@ class LinksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def link_params
-      params.require(:link).permit(:title, :url)
+      params.require(:link).permit(:title, :url, category_ids: []).merge(user_id: current_user.id)
     end
 end
