@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_02_164915) do
+ActiveRecord::Schema.define(version: 2019_06_13_090405) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -18,14 +18,19 @@ ActiveRecord::Schema.define(version: 2019_06_02_164915) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "link_categories", force: :cascade do |t|
+    t.integer "link_id"
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_link_categories_on_category_id"
+    t.index ["link_id"], name: "index_link_categories_on_link_id"
+  end
+
   create_table "links", force: :cascade do |t|
     t.string "title"
     t.string "url"
     t.integer "user_id"
-    t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_links_on_category_id"
     t.index ["user_id"], name: "index_links_on_user_id"
   end
 
@@ -37,6 +42,7 @@ ActiveRecord::Schema.define(version: 2019_06_02_164915) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
