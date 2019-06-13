@@ -1,23 +1,64 @@
-%h1 Listing links
 
-%table
-  %thead
-    %tr
-      %th Title
-      %th Url
-      %th
-      %th
-      %th
+%div{:style => "display: flex; justify-content: space-between; padding: 2px;"}
+  %div
+    %p
+      =@links.count
+      LINKS - Show 
+      %a{:href => ""} Categories
+      |
+      %a{:href => ""} Users
+  %div
+    %p
+      - if user_signed_in?
+        %a{:href => ""}= link_to 'Logout', destroy_user_session_path, method: :delete
+      - else
+        %a{:href => ""}= link_to 'Login', new_user_session_path
 
+%table.ui.table{style: "width: 100%; border: none; margin: 0;"}
   %tbody
-    - @links.each do |link|
-      %tr
-        %td= link.title
-        %td= link.url
-        %td= link_to 'Show', link
-        %td= link_to 'Edit', edit_link_path(link)
-        %td= link_to 'Destroy', link, method: :delete, data: { confirm: 'Are you sure?' }
+    %tr
+      %td{style: "padding: 0px"}
+        .ui.icon.input.fluid
+          %i.search.icon
+          %input{:placeholder => "Search...", :type => "text"}
+      - if user_signed_in?
+        %td.collapsing{style: "padding-right: 0px; padding-bottom: 0; padding-top: 0;"}
+          = link_to 'New Link', new_link_path, class: "ui button", style: "margin-right: 0;"
 
-%br
+- if @links.count > 0
+  %table.ui.compact.table
+    %tbody
+      - @links.each do |link|
+        %tr
+          %td.collapsing
+            %a{:href => ""}
+              %div
+                %i.ui.icon.caret.up
+            %a{:href => ""}
+              %div
+                %i.ui.icon.caret.down
+          %td.collapsing 0
+          %td
+            %div
+              %span= link.title
+              %span{:style => "color: grey; white-space: nowrap;"}
+                (
+                %a{:href => link.url}= link.url
+                )
+                - if user_signed_in?
+                  %span= link_to 'Edit', edit_link_path(link)
+                  %span= link_to 'Destroy', link, method: :delete, data: { confirm: 'Are you sure?' }
 
-= link_to 'New Link', new_link_path
+
+            %div
+              %span{:style => "color: grey; font-size: 0.8em"}
+                %span.time-ago= link.created_at
+                %a{:href => ""}= link.user.username
+
+          %td.collapsing
+            %a{:href => ""}
+              .ui.label= link.categories.map{|cat| cat.name}.join "/"
+- else
+  %br
+  %br
+  %p{style: "text-align: center"} No links found.
