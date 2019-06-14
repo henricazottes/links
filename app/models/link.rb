@@ -3,7 +3,8 @@ class Link < ApplicationRecord
   pg_search_scope :global_search, {
     against: [:title, :url],
     associated_against: {
-      user: [:username]
+      user: :username,
+      categories: :name
     },
     using: {
       tsearch: {any_word: true},

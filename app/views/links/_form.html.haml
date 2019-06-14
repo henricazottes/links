@@ -17,5 +17,6 @@
     - @categories.each do |category|
       = check_box(:link, :category_ids, {multiple: true}, category.id.to_i, nil)
       = category.name
+      %br
   .actions
     = f.submit 'Save', class: "ui button primary"

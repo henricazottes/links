@@ -10,18 +10,19 @@ class LinksController < ApplicationController
       @links = Link.all
     end
     @links.limit(20).reverse
+    @total_links_count = Link.all.count
   end
 
   # GET /links/1
   # GET /links/1.json
   def show
-    @categories = Category.all
+    @categories = Category.all.sort_by{ |e| e.name.downcase }
   end
 
   # GET /links/new
   def new
     @link = Link.new
-    @categories = Category.all
+    @categories = Category.all.sort_by{ |e| e.name.downcase }
   end
 
   # GET /links/1/edit

@@ -1,65 +1,59 @@
 
 %div{:style => "display: flex; justify-content: space-between; padding: 2px;"}
   %div
-    %p
-      =@links.count
-      LINKS - Show 
-      %a{:href => ""} Categories
-      |
-      %a{:href => ""} Users
+    %a{href: "/"}
+      = "- LINKS -"
+    %p{style: "color: grey; display: inline-block;"}= @total_links_count.to_s + " links shared so far."
   %div
     %p
       - if user_signed_in?
+        = link_to '+ New Link', new_link_path
+        | 
         %a{:href => ""}= link_to 'Logout', destroy_user_session_path, method: :delete
       - else
         %a{:href => ""}= link_to 'Login', new_user_session_path
 
-%table.ui.table{style: "width: 100%; border: none; margin: 0;"}
-  %tbody
-    %tr
-      %td{style: "padding: 0px"}
-        %form{method: "GET", action: "links"}
-          .ui.icon.input.fluid
-            %i.search.icon
-            %input{:placeholder => "Search...", :type => "text", name: "search"}
-            %input{type: "submit", style: "display: none;"}
-      - if user_signed_in?
-        %td.collapsing{style: "padding-right: 0px; padding-bottom: 0; padding-top: 0;"}
-          = link_to 'New Link', new_link_path, class: "ui button", style: "margin-right: 0;"
+%form{method: "GET", action: "links", style: "width: 100%; border: none; margin: 0;; margin-bottom: 10px;"}
+  .ui.icon.input.fluid
+    %i.search.icon
+    %input{:placeholder => "Search...", :type => "text", name: "search"}
+    %input{type: "submit", style: "display: none;"}
 
 - if @links.count > 0
-  %table.ui.compact.table
+  - if params[:search].present?
+    %p{style: "margin: 0px; color: grey;"}= @links.count.to_s + " results for: " + params[:search]
+  - else
+    %p{style: "margin: 0px; color: grey;"}= "Latest links:"
+  %table.ui.compact.table{style: "margin-top: 0px;"}
     %tbody
       - @links.each do |link|
         %tr
-          %td.collapsing
-            %a{:href => ""}
-              %div
-                %i.ui.icon.caret.up
-            %a{:href => ""}
-              %div
-                %i.ui.icon.caret.down
-          %td.collapsing 0
+          -# %td.collapsing
+          -#   %a{:href => ""}
+          -#     %div
+          -#       %i.ui.icon.caret.up
+          -#   %a{:href => ""}
+          -#     %div
+          -#       %i.ui.icon.caret.down
+          -# %td.collapsing 0
           %td
             %div
               %span= link.title
               %span{:style => "color: grey; white-space: nowrap;"}
                 (
-                %a{:href => link.url}= link.url
+                %a{:href => link.url}= link.url.gsub("https://", "").gsub("http://", "")
                 )
-                - if user_signed_in?
-                  %span= link_to 'Edit', edit_link_path(link)
-                  %span= link_to 'Destroy', link, method: :delete, data: { confirm: 'Are you sure?' }
-
 
             %div
-              %span{:style => "color: grey; font-size: 0.8em"}
-                %span.time-ago= link.created_at
+              %span{:style => "color: grey; font-size: 0.8em;"}
+                %span.time-ago= time_ago_in_words(link.created_at)
                 %a{:href => ""}= link.user.username
-
           %td.collapsing
-            %a{:href => ""}
-              .ui.label= link.categories.map{|cat| cat.name}.join "/"
+            - if link.categories.present?
+              %a{:href => ""}
+                - link.categories.each do |cat|
+                  .ui.label
+                    %a{href:"links?search=" + cat.name}= " /" + cat.name
 - else
   %br
   %br

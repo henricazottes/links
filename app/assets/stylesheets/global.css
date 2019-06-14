@@ -1,0 +1,10 @@
+@media screen and (max-width: 768px) {
+  table.ui > tbody > tr {
+    padding-top: 0.4em !important;
+    padding-bottom: 0.4em !important;
+  }
+
+  table.ui.table > tbody > tr > td {
+    font-weight: initial !important;
+  }
+}
