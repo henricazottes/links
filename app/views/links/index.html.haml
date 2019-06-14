@@ -18,9 +18,11 @@
   %tbody
     %tr
       %td{style: "padding: 0px"}
-        .ui.icon.input.fluid
-          %i.search.icon
-          %input{:placeholder => "Search...", :type => "text"}
+        %form{method: "GET", action: "links"}
+          .ui.icon.input.fluid
+            %i.search.icon
+            %input{:placeholder => "Search...", :type => "text", name: "search"}
+            %input{type: "submit", style: "display: none;"}
       - if user_signed_in?
         %td.collapsing{style: "padding-right: 0px; padding-bottom: 0; padding-top: 0;"}
           = link_to 'New Link', new_link_path, class: "ui button", style: "margin-right: 0;"

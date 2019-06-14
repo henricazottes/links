@@ -66,3 +66,7 @@ gem "devise", "~> 4.6"
 gem "haml-rails", "~> 2.0"
 
 gem "pg", "~> 1.1"
+
+gem "pg_search", "~> 2.2"
+
+gem "pg_trgm", "~> 0.0.1"
