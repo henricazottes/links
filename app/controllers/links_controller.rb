@@ -10,7 +10,7 @@ class LinksController < ApplicationController
     else
       @links = Link.all
     end
-    @links.limit(20).reverse
+    @links = @links.limit(20).reverse
     @total_links_count = Link.all.count
   end
 
